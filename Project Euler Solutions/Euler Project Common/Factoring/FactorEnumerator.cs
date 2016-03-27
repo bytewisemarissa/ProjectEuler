@@ -19,6 +19,7 @@ namespace ProjectEulerCommon.Factoring
 
         public IEnumerator<long> GetEnumerator()
         {
+            List<long> returnedFactors = new List<long>();
             for (long i = 1; i < _numberToFactor / 2; i++)
             {
                 if (_numberToFactor % i == 0)
@@ -30,14 +31,23 @@ namespace ProjectEulerCommon.Factoring
                     else
                     {
                         _laterSeries.Add(_numberToFactor / i);
-                        yield return i;
+                        if(!returnedFactors.Contains(i))
+                        {
+                            returnedFactors.Add(i);
+                            yield return i;
+                        }
+                        
                     }
                 }
             }
 
             foreach (long highNum in _laterSeries.OrderBy(num => num))
             {
-                yield return highNum;
+                if (!returnedFactors.Contains(highNum))
+                {
+                    returnedFactors.Add(highNum);
+                    yield return highNum;
+                }
             }
         }
 
